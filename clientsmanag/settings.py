@@ -92,16 +92,7 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         'NAME': 'clientsmanag',
-#         'USER': 'cm_usr1',
-#         'PASSWORD': 'YhD!27ChLLp4!N5',
-#         'HOST': '192.168.1.200',
-#         # 'HOST': 'localhost',
-#     }
-# }
+
 
 
 
