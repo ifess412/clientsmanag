@@ -1,0 +1,10 @@
+<form method="get" class="row g-2">
+    <!-- {% csrf_token %} -->
+    <div class="col-5">
+        <!-- <input type="hidden" name="t" class="form-control" value="{{table}}"> -->
+        <input type="text" name="s" class="form-control" placeholder="{{msg.search_field}}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3"> <i class="bi bi-search"></i> {{elems.search}}</button>
+    </div>
+</form>

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load breadcrumbs %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <h5>{{objtitle}}</h5>
+        </div>
+        <br>
+
+        <div class="row">
+            {% if items.exists %}
+            <div class="table">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            {% for cn in columnames %}
+                            <th scope="col">{{cn}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <th scope="row">{{item.pk}}</th>
+                            <!-- <td><a href="{{ item.get_absolute_url }}">{{item.name}}</a></td> -->
+                            <td>{{item.mess}}</td>
+                            <!-- <td>{{item.action_tag}}</td> -->
+                            {% for key, value in actions.items %}
+                            {% if key == item.action_tag %}
+                            <td>{{value}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            <td>{{item.date_time}}</td>
+                            <td>{% if item.user.first_name %}{{item.user.first_name}}{% else %}{{item.user.username}}{% endif %}</td>
+                            <!-- <td>
+                                {% if item.tags.exists %}
+                                {% for tag in item.tags.all %}
+                                <span class="badge rounded-pill" style="background-color: {{tag.color}};">
+                                    <a href="{{ tag.get_absolute_url }}" style="color: aliceblue;">{{tag.title}}</a>
+                                </span>
+                                {% endfor %}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td> -->
+                            <td>
+                                <div class="btn-group">
+                                    <!-- <a href="{{ item.get_absolute_url }}" class="btn btn-outline-secondary btn-sm"><i
+                                            class="bi bi-eye-fill"></i></a>
+                                    <a href="{{ item.get_absolute_url_for_update }}"
+                                        class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i>
+                                    </a> -->
+                                    <a href="{{ item.get_absolute_url_for_delete }}"
+                                        class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-square-fill"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+            {% else %}
+            <div class="alert alert-danger" role="alert">
+                {{err_msg}}
+            </div>
+            {% endif %}
+
+        </div>
+
+        {% include 'inc/_pagination.html' %}
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <a href="{{ new_url }}" class="btn btn-success">
+                    <i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+            </div>
+            <div class="col-lg-6">
+                {% search_field %}
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            {% if items.exists %}
+            <div class="table">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            {% for key,value in columnames.items %}
+                            <th scope="col">{{value}}  
+                                {% if key in sort_fields %}
+                                <!-- <div class="btn-group-vertical btn-group-sm"> -->
+                                    <!-- Сортування -->
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                    <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                </div>
+                                <!-- Сортування -->
+                                {% endif %}
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <th scope="row">{{item.pk}}</th>
+                            <td>
+                                <!-- <a href="{{ item.get_absolute_url }}"> -->
+                                {% if item.code %}
+                                {{item.code}}
+                                {% else %}
+                                -
+                                {% endif %}
+                                <!-- </a> -->
+                            </td>
+                            <td>
+                                <!-- <a href="{{ item.get_absolute_url }}"> -->
+                                {{item.name}}
+                                <!-- </a> -->
+                            </td>
+                            <td>
+                                <!-- <a href="{{ item.get_absolute_url }}"> -->
+                                {{item.fullname}}
+                                <!-- </a> -->
+                            </td>
+                            <td>
+                                {% if item.discount__pk %}
+                                <a href="{% url upd_url item.discount__pk %}" style="color: black; font-weight: bold;">
+                                {{item.discount__discount}}
+                                </a>
+                                {% else %}
+                                <a href="{% url add_url %}?i={{ item.name }}" style="color: black; font-weight: bold;">
+                                0
+                                </a>
+                                {% endif %}
+                                
+                            </td>
+                            <td>
+                                {% if item.discount__datetime %}
+                                {{item.discount__datetime|date:"d.m.Y H:i"}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <!-- <td>
+                                {% if item.code %}
+                                {{item.code}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            {% for key, value in nomenclature_type.items %}
+                            {% if key == item.type %}
+                            <td>{{value}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            <td>
+                            {% if item.tag %}
+                            <span class="badge rounded-pill" style="background-color: {{item.tag.color}};">
+                                <a href="{{ item.tag.get_absolute_url }}" style="color: aliceblue;">{{item.tag.title}}</a>
+                            </span>
+                            {% else %}
+                            -
+                            {% endif %}
+                            </td> -->
+                            <td>
+                                <div class="btn-group">
+                                    {% if item.discount__pk %}
+                                    <a href="{% url upd_url item.discount__pk %}"class="btn btn-outline-secondary btn-sm" 
+                                    data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                    ><i class="bi bi-pencil-fill"></i></a>
+                                    <a href="{% url del_url item.discount__pk %}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                        ><i class="bi bi-x-square-fill"></i></a>
+                                    {% else %}
+                                    <a href="{% url add_url %}?i={{ item.name }}"class="btn btn-outline-secondary btn-sm" 
+                                    data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.add}}"
+                                    ><i class="bi bi-plus-lg"></i></a>
+                                    {% endif %}
+                                    <!-- <a href="{{ item.get_absolute_url }}" 
+                                        class="btn btn-outline-secondary btn-sm"
+                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.show}}"
+                                        ><i class="bi bi-eye-fill"></i></a> -->
+                                    <!-- <a href="{{ item.get_absolute_url_for_update }}"
+                                        class="btn btn-outline-secondary btn-sm" 
+                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                        ><i class="bi bi-pencil-fill"></i></a> -->
+                                    <!-- <a href="{{ item.get_absolute_url_for_delete }}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                        ><i class="bi bi-x-square-fill"></i></a> -->
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+        {% include 'inc/_pagination.html' %}
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+
+{% endblock %}

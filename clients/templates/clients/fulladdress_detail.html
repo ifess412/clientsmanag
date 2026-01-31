@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-lg-4 sidebar">
+                    {{item.name}}
+                </div>
+                <div class="col-lg-8">
+                    {{item.name}}
+                </div> -->
+
+            <!-- <div class="card" style="width: 18rem;"> -->
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <!-- <div class="card text-bg-light"> -->
+                    <!-- <div class="card text-center"> -->
+                    <!-- <div class="card-header">
+                            Featured
+                        </div> -->
+                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.id}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text">{{item.id}}</span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.client}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.client}}</b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.addresstype}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.addresstype %} 
+                                    {% for key, value in addresstypes.items %}
+                                    {% if key == item.addresstype and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %} -- {% endif %} 
+                                </b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.index}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{% if item.index %} {{item.index}}{% else %} -- {% endif %} </b></span></p>
+                                
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.country}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.country %} 
+                                    {% for key, value in countries.items %}
+                                    {% if key == item.country and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %} -- {% endif %} 
+                                    </b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.region}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.region %} 
+                                    {% for key, value in regions.items %}
+                                    {% if key == item.region and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %} -- {% endif %} 
+                                    </b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <!-- <p><span class="card-title">{{card_titles.settltype}}: </span></p> -->
+                                <p><span class="card-title">{{card_titles.cityname}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.cityname %} 
+                                        {% if item.cityname.settltype %} 
+                                            {% for key, value in settltypes.items %}
+                                                {% if key == item.cityname.settltype and key != 0 %} {{value}} {% endif %}
+                                            {% endfor %}
+                                        {% endif %} 
+                                    {{ item.cityname }} 
+                                    {% else %} -- 
+                                    {% endif %}
+                                    </b></span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <!-- <p><span class="card-title">{{card_titles.streettype}}: </span></p> -->
+                                <p><span class="card-title">{{card_titles.streetname}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.streetname %} 
+                                            {% if item.streetname.streettype %} 
+                                                {% for key, value in streettypes.items %}
+                                                    {% if key == item.streetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        {{ item.streetname }} 
+                                        {% else %} -- 
+                                        {% endif %}
+                                    {% if item.housenum %} буд. {{ item.housenum }} {% endif %}
+                                    {% if item.apartmenttype %} 
+                                    {% for key, value in apartmenttypes.items %}
+                                    {% if key == item.apartmenttype and key != 0 %} {{value}} {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% if item.apartment %} {{ item.apartment }}{% endif %}
+                                    </b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.oldstreetname}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.oldstreetname %} 
+                                        {% if item.oldstreetname %} 
+                                            {% if item.oldstreetname.streettype %} 
+                                                {% for key, value in streettypes.items %}
+                                                    {% if key == item.oldstreetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        {{ item.oldstreetname }} 
+                                        {% else %} -- 
+                                        {% endif %}
+                                        {% if item.housenum %} буд. {{ item.housenum }} {% endif %}
+                                        {% if item.apartmenttype %} 
+                                        {% for key, value in apartmenttypes.items %}
+                                        {% if key == item.apartmenttype and key != 0 %} {{value}} {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% if item.apartment %} {{ item.apartment }}{% endif %}
+                                    {% else %} -- {% endif %}
+                                        </b></span></p>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.distr}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                    {% if item.distr %} 
+                                        {{item.distr}}
+                                    {% else %}
+                                        {% if item.streetname.distr %}   
+                                            {{ item.streetname.distr.name }}
+                                        {% endif %} 
+                                    {% endif %} 
+                                </b></span></p>
+                                
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.entrance}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{% if item.entrance %} {{item.entrance}}{% else %} -- {% endif %} </b></span></p>
+                                
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.floor}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{% if item.floor %} {{item.floor}}{% else %} -- {% endif %} </b></span></p>
+                                
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.comment}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.comment}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-body-secondary  text-end">
+                        <small class="text-body-secondary"> {{elems.lastupd}} {{lastupd|date:"d.m.Y H:i" }} {{elems.lastupdby}} {{lastupdby}}</small>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                            </div>
+                            <div class="col-md-2 text-center">
+
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
+                                        class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+{% endblock %}

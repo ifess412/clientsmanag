@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-lg-4 sidebar">
+                    {{item.name}}
+                </div>
+                <div class="col-lg-8">
+                    {{item.name}}
+                </div> -->
+
+            <!-- <div class="card" style="width: 18rem;"> -->
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <!-- <div class="card text-bg-light"> -->
+                    <!-- <div class="card text-center"> -->
+                    <!-- <div class="card-header">
+                            Featured
+                        </div> -->
+                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.0}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text">{{item.id}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.1}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.name}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.2}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>
+                                        {% if item.phone1 is not None %}{{item.phone1}}{% endif %}
+                                        {% if item.phone2 is not None %}, {{item.phone2}}{% endif %}
+                                        {% if item.phone3 is not None %}, {{item.phone3}}{% endif %}
+                                    </b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.3}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.email}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.4}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>
+                                        <a href="{{ item.client.get_absolute_url }}">{{item.client}}</a>
+                                    </b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.5}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.position}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.6}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.order}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.7}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.comment}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <span class="card-title">{{card_titles.7}}: </span>
+                                </div>
+                                <div class="col-md-10">
+                                    <span class="card-text"><b>
+                                            {% if item.tags.exists %}
+                                            {% for tag in item.tags.all %}
+                                            <span class="badge rounded-pill text-bg-primary">
+                                                <a href="{{ tag.get_absolute_url }}"
+                                                    style="color: aliceblue;">{{tag.title}}</a>
+                                            </span>
+                                            {% endfor %}
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </b></span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    <!-- <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <span class="card-title">{{card_titles.9}}: </span>
+                                </div>
+                                <div class="col-md-10">
+                                    <span class="card-text">
+                                        {% if item.accesses.exists %}
+                                        <div class="table">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">{{table_accesses.1}}</th>
+                                                        <th scope="col">{{table_accesses.2}}</th>
+                                                        <th scope="col">{{table_accesses.3}}</th>
+                                                        <th scope="col">{{table_accesses.4}}</th>
+                                                        <th scope="col">{{table_accesses.7}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in item.accesses.all|dictsort:"order" %}
+                                                    <tr>
+                                                        <td><a href="{{ i.get_absolute_url }}">{{i.name}}</a></td>
+                                                        <td>{{i.app}}</td>
+                                                        <td>{{i.idinapp}}</td>
+                                                        <td>{{i.passinapp}}</td>
+                                                        <td>{{i.comment}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                        </b>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    <!-- <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card’s content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card’s content.</p>
+                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">An item</li>
+                                <li class="list-group-item">A second item</li>
+                                <li class="list-group-item">A third item</li>
+                            </ul>
+                        </div> -->
+
+                    <div class="card-footer text-body-secondary  text-end">
+                        <small class="text-body-secondary"> {{elems.lastupd}} {{lastupd|date:"d.m.Y H:i" }} {{elems.lastupdby}} {{lastupdby}}</small>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <a href="{% url 'contact_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                            </div>
+                            <div class="col-md-2 text-center">
+
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
+                                        class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+
+{% endblock %}

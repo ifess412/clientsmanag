@@ -1,0 +1,17 @@
+<div class="page-title" data-aos="fade">
+    <div class="container">
+        <nav class="breadcrumbs">
+            <ol>
+                {% for item in bcs %}
+                {% if forloop.last %}
+                <li class="current">{{ item.title }}</li>
+                {% else %}
+                <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+                {% endif %}
+                {% endfor %}
+                <!-- <p>Total items: {{ bcs|length }}</p> -->
+            </ol>
+        </nav>
+        <h1>{{ title}}</h1>
+    </div>
+</div>

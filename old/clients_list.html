@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load filter %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <a href="{% url 'client_create' %}" class="btn btn-success">
+                    <i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+            </div>
+            <div class="col-lg-6">
+                {% search_field 'clients' %}
+            </div>
+            <div class="col-lg-2">
+                <!-- add row for Filters  -->
+                {% filter_tags %}
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            {% if items.exists %}
+            <div class="table">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            {% for cn in columnames %}
+                            <th scope="col">{{cn}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <th scope="row">{{item.pk}}</th>
+                            
+                            <td>{{item.code}}</td>
+                            <td><a href="{{ item.get_absolute_url }}">{{item.name}}</a></td>
+                            <td>{{item.fullname}}</td>
+                            {% for key, value in client_type.items %}
+                            {% if key == item.type %}
+                            <td>{{value}}</td>
+                            {% endif %}
+                            {% endfor %}
+                            <td>{{item.address}}</td>
+                            <td>{{item.comment}}</td>
+                            <td>
+                                {% if item.tags.exists %}
+                                {% for tag in item.tags.all %}
+                                <span class="badge rounded-pill" style="background-color: {{tag.color}};">
+                                    <a href="{{ tag.get_absolute_url }}" style="color: aliceblue;">{{tag.title}}</a>
+                                </span>
+                                {% endfor %}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ item.get_absolute_url }}" class="btn btn-outline-secondary btn-sm"><i
+                                            class="bi bi-eye-fill"></i></a>
+                                    <a href="{{ item.get_absolute_url_for_update }}"
+                                        class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a href="{{ item.get_absolute_url_for_delete }}"
+                                        class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-square-fill"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+            {% endif %}
+
+        </div>
+
+        {% include 'inc/_pagination.html' %}
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+{% endblock %}

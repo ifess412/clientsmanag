@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="card-body">
+                            {{ form.as_p }}
+                        </div>
+
+                        <!-- <div class="card-footer">
+                            <div class="row g-0">
+                                <div class="col-md-4 isbtn">
+                                    <a href="{% url 'home' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                </div>
+                                <div class="col-md-4 isbtn">
+                                    <a href="{% url 'register' %}" class="btn btn-primary"><i class="bi bi-play-fill"></i> {{elems.reg}}</a>
+                                </div>
+                                <div class="col-md-4 text-end isbtn">
+                                    <button type="submit" class="btn btn-success btn-block"><i
+                                            class="bi bi-box-arrow-in-right"></i> {{elems.login}}</button>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="card-footer">
+                            <div class="row g-0">
+                                <div class="col-md-5">
+                                    <a href="{% url 'home' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                    <!-- <a href="{% url 'register' %}" class="btn btn-outline-primary"><i class="bi bi-play-fill"></i> {{elems.reg}}</a>
+                                 -->
+                                </div>
+                                <div class="col-md-4 text-end isbtn">
+                                    <a href="{% url 'register' %}" class="btn btn-outline-primary"><i class="bi bi-play-fill"></i> {{elems.reg}}</a>
+                                
+                                </div>
+                                <div class="col-md-3 text-end isbtn">
+                                    <button type="submit" class="btn btn-success btn-block"><i
+                                            class="bi bi-box-arrow-in-right"></i> {{elems.login}}</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+{% endblock %}

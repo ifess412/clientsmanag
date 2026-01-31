@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="card-body">
+                            {{ form.as_p }}
+                        </div>
+
+                        <!-- <div class="card-body">
+
+                                {% if form.non_field.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.non_field.errors }}
+                                </div>
+                                {% endif %}
+
+
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.1}}:</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        {{form.name}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.name.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.2}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.code}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.code.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.3}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.fullname}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.fullname.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.4}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.type}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.type.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.5}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.address}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.address.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.6}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.comment}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.comment.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="row g-2">
+                                    <div class="col-md-2">
+                                        <label for="{{ form.title.id_for_label }}"
+                                            class="col-form-label">{{card_titles.7}}:</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        {{form.tags}}
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        {{ form.tags.errors }}
+                                    </div>
+                                </div>
+                                <br>
+
+                            </div> -->
+
+
+                        <div class="card-footer">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <a href="{% url 'access_list' %}" class="btn btn-secondary"><i
+                                            class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                </div>
+                                <div class="col-md-4 text-center">
+
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <button type="submit" class="btn btn-success btn-block"><i
+                                            class="bi bi-bookmark-check-fill"></i> {{elems.save}}</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <a href="{{ new_url }}" class="btn btn-success">
+                    <i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+            </div>
+            <div class="col-lg-6">
+                {% search_field %}
+            </div>
+            <div class="col-lg-2">
+                <a href="{% url 'export_to_excel' model=mdl orderby=sort filterrows=filter  %}" class="btn btn-secondary"><i class="bi bi-file-earmark-arrow-down"> </i>  {{elems.exp}}</a>
+            </div>
+            <br>
+
+            <div class="row">
+                {% if items.exists %}
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                {% for key,value in columnames.items %}
+                                <th scope="col">{{value}}  
+                                    {% if key in sort_fields %}
+                                    <!-- <div class="btn-group-vertical btn-group-sm"> -->
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                        <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                    </div>
+                                    {% endif %}
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <th scope="row">{{item.pk}}</th>
+                                <td><a href="{{ item.get_absolute_url }}" style="color: black;  font-weight: bold;" >{{item.title}}</a></td>
+                                <td>{{item.color}}</td>
+                                <td>
+                                    <span class="badge rounded-pill" style="background-color: {{item.color}};">
+                                        <a href="{{ item.get_absolute_url }}"
+                                            style="color: aliceblue;">{{item.title}}</a>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url dtl_url item.slug %}" 
+                                            class="btn btn-outline-secondary btn-sm"
+                                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.show}}"
+                                            ><i class="bi bi-eye-fill"></i></a>
+                                        <a href="{% url upd_url item.slug %}"
+                                            class="btn btn-outline-secondary btn-sm" 
+                                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                            ><i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="{% url del_url item.slug %}"
+                                            class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                            ><i class="bi bi-x-square-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+            {% include 'inc/_pagination.html' %}
+        </div>
+</section><!-- /About Section -->
+{% endblock %}

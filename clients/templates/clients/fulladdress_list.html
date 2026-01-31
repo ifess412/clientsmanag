@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <a href="{{ new_url }}" class="btn btn-success">
+                    <i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+            </div>
+            <div class="col-lg-6">
+                {% search_field %}
+            </div>
+            <div class="col-lg-2">
+                <a href="{% url 'export_to_excel' model=mdl orderby=sort filterrows=filter  %}" class="btn btn-secondary"><i class="bi bi-file-earmark-arrow-down"> </i>  {{elems.exp}}</a>
+            </div>
+            <br>
+
+            <div class="row">
+                {% if items.exists %}
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                {% for key,value in columnames.items %}
+                                {% if key in show_colums %}
+                                    <th scope="col">{{value}}  
+                                    {% if key in sort_fields %}
+                                        <!-- <div class="btn-group-vertical btn-group-sm"> -->
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                            <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                        </div>
+                                    {% endif %}
+                                    </th>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <th scope="row">{{item.pk}}</th>
+                                <td><a href="{{ item.client.get_absolute_url }}" style="color: black;">{{item.client}}</a></td>
+                                <td>
+                                    {% for key, value in addresstypes.items %}
+                                    {% if key == item.addresstype and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <!-- <td> {% if item.index %} {{item.index}} {% endif %} </td> -->
+                                <!-- <td>
+                                    {% for key, value in countries.items %}
+                                    {% if key == item.country and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td> -->
+                                <!-- <td>
+                                    {% for key, value in regions.items %}
+                                    {% if key == item.region and key != 0 %}
+                                    {{value}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td> -->
+                                <td>
+                                    {% if item.cityname %} 
+                                        {% if item.cityname.settltype %} 
+                                            {% for key, value in settltypes.items %}
+                                                {% if key == item.cityname.settltype and key != 0 %} {{value}} {% endif %}
+                                            {% endfor %}
+                                        {% endif %} 
+                                    {{ item.cityname }} 
+                                    {% else %} -- 
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ item.get_absolute_url }}" style="color: black;  font-weight: bold;" >
+                                        {% if item.streetname %} 
+                                            {% if item.streetname.streettype %} 
+                                                {% for key, value in streettypes.items %}
+                                                    {% if key == item.streetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        {{ item.streetname }} 
+                                        {% else %} -- 
+                                        {% endif %}
+                                        
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ item.get_absolute_url }}" style="color: black;  " >
+                                        {% if item.oldstreetname %} 
+                                            {% if item.oldstreetname.streettype %} 
+                                                {% for key, value in streettypes.items %}
+                                                    {% if key == item.oldstreetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                {% endfor %}
+                                            {% endif %} 
+                                        {{ item.oldstreetname }} 
+                                        {% else %} -- 
+                                        {% endif %}
+                                        
+                                    </a>
+                                </td>
+                                <!-- <td>
+                                    {% if item.oldstreetname %} <a href="{{ item.get_absolute_url }}" style="color: black; " >{{item.oldstreetname}}</a>
+                                    {% else %} -- 
+                                    {% endif %}
+                                </td> -->
+                                <td> {% if item.housenum %} <a href="{{ item.get_absolute_url }}" style="color: black; " >{{item.housenum}}</a> {% endif %} </td>
+                                <td> {% if item.apartment %} <a href="{{ item.get_absolute_url }}" style="color: black; " >{{item.apartment}}</a> {% endif %} </td>
+                                <!-- <td> {% if item.entrance %} {{item.entrance}} {% endif %} </td> -->
+                                <!-- <td> {% if item.floor %} {{item.floor}} {% endif %} </td> -->
+
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url dtl_url item.pk %}" 
+                                            class="btn btn-outline-secondary btn-sm"
+                                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.show}}"
+                                            ><i class="bi bi-eye-fill"></i></a>
+                                        <a href="{% url upd_url item.pk %}"
+                                            class="btn btn-outline-secondary btn-sm" 
+                                            data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                            ><i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a href="{% url del_url item.pk %}"
+                                            class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                            ><i class="bi bi-x-square-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+            {% include 'inc/_pagination.html' %}
+        </div>
+</section><!-- /About Section -->
+{% endblock %}

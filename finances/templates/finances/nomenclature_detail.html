@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-lg-4 sidebar">
+                    {{item.name}}
+                </div>
+                <div class="col-lg-8">
+                    {{item.name}}
+                </div> -->
+
+            <!-- <div class="card" style="width: 18rem;"> -->
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.id}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text">{{item.id}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.name}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.name}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.fullname}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>{{item.fullname}}</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.code}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>
+                                    {% if item.code %}
+                                    {{item.code}}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.type}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>
+                                    {% for key, value in nomenclature_type.items %}
+                                    {% if key == item.type %}
+                                    <td>{{value}}</td>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <span class="card-title">{{card_titles.tag}}: </span>
+                            </div>
+                            <div class="col-md-10">
+                                <span class="card-text"><b>
+                                    {% if item.tag %}
+                                    <span class="badge rounded-pill" style="background-color: {{item.tag.color}};">
+                                        <a href="{{ item.tag.get_absolute_url }}" style="color: aliceblue;">{{item.tag.title}}</a>
+                                    </span>
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-body-secondary  text-end">
+                        <small class="text-body-secondary"> {{elems.lastupd}} {{lastupd|date:"d.m.Y H:i" }} {{elems.lastupdby}} {{lastupdby}}</small>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                            </div>
+                            <div class="col-md-2 text-center">
+
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
+                                        class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+
+{% endblock %}

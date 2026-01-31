@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.id}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text">{{item.id}}</span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.name}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.name}}</b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.app}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.app}}</b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.idinapp}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.idinapp}}</b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.passinapp}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.passinapp}}</b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.client}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>
+                                        <a href="{{ item.client.get_absolute_url }}">{{item.client}}</a>
+                                    </b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.order}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.order}}</b></span></p>
+                            </div>
+                        </div>
+
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <p><span class="card-title">{{card_titles.comment}}: </span></p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><span class="card-text"><b>{{item.comment}}</b></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-body-secondary  text-end">
+                        <small class="text-body-secondary"> {{elems.lastupd}} {{lastupd|date:"d.m.Y H:i" }} {{elems.lastupdby}} {{lastupdby}}</small>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row g-0">
+                            <div class="col-md-6">
+                                <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                            </div>
+                            <div class="col-md-2 text-center">
+
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
+                                        class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+{% endblock %}

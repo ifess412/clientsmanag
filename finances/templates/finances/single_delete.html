@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- <div class="card-body">
+                                {{ form.as_p }}
+                            </div> -->
+
+                        <div class="card-body">
+
+                            {% if form.non_field.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form.non_field.errors }}
+                            </div>
+                            {% endif %}
+
+                            <div class="row g-0 align-items-center">
+                                <center>
+                                    <span>{{msg}}</span><br>
+                                    <span><b>{{object}} (ID={{object.id}})</b></span>
+                                </center>
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-footer">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <a href="{{back_url}}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i>
+                                        {{elems.back}}</a>
+                                </div>
+                                <div class="col-md-4 text-center">
+
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <button type="submit" class="btn btn-danger btn-block"><i
+                                            class="bi bi-x-square-fill"></i> {{elems.del}}</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+{% endblock %}

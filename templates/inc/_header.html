@@ -1,0 +1,27 @@
+{% load menu %}
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+
+        {% show_logo %}
+
+        {% if perms.clients.delete_islog %}
+        {% show_menu 'foradmins' %}
+        {% else %}
+        {% show_menu %}
+        {% endif %}
+
+        <!-- <a class="btn-getstarted" href="#about">Get Started</a> -->
+
+        {% if request.user.is_authenticated %}
+        <!-- <span class="btn-getstarted">{{ user.username }} | <a class="" style="color: white;" href="{% url 'logout' %}">Вихід</a></span> -->
+        <!-- <span class="btn-getstarted">{{ user.username }} | <a class="" style="color: white;" href="{% url 'logout' %}">Вихід</a></span> -->
+        <span class="btn-getstarted"><a href="{% url 'user_detail' %}" style="color: white;">{% if user.first_name %}{{user.first_name}}{% else %}{{user.username}}{% endif %}</a>  | <a class="" style="color: white;" href="{% url 'logout' %}">Вихід</a></span>
+        {% else %}
+        <a class="btn-getstarted" href="{% url 'login' %}">Вхід</a>
+        {% endif %}
+
+
+
+
+    </div>
+</header>

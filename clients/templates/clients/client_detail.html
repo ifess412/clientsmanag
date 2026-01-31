@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <!-- topbar -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-lg-4 sidebar">
+                    {{item.name}}
+                </div>
+                <div class="col-lg-8">
+                    {{item.name}}
+                </div> -->
+
+            <!-- <div class="card" style="width: 18rem;"> -->
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <div class="card">
+                        <!-- <div class="card text-bg-light"> -->
+                        <!-- <div class="card text-center"> -->
+                        <!-- <div class="card-header">
+                                Featured
+                            </div> -->
+                        <!-- <img src="..." class="card-img-top" alt="..."> -->
+                        <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.id}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text">{{item.id}}</span></p>
+                                </div>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.name}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>{{item.name}}</b></span></p>
+                                </div>
+                            </div>
+                        
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.code}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>{{item.code}}</b></span></p>
+                                </div>
+                            </div>
+                        
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.fullname}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>{{item.fullname}}</b></span></p>
+                                </div>
+                            </div>
+                        
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.type}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>
+                                            {% for key, value in client_type.items %}
+                                            {% if key == item.type %}
+                                            <td>{{value}}</td>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </b></span></p>
+                                </div>
+                            </div>
+                        
+                            <!-- <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.address}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>{{item.address}}</b></span></p>
+                                </div>
+                            </div> -->
+
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.address}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    {% if item.fulladdresses.exists %}
+                                    <span class="card-text">
+                                        <div class="table">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">{{table_fulladdress.addresstype}}</th>
+                                                        <th scope="col">{{table_fulladdress.cityname}}</th>
+                                                        <th scope="col">{{table_fulladdress.streetname}}</th>
+                                                        <th scope="col">{{table_fulladdress.oldstreetname}}</th>
+                                                        <!-- <th scope="col">{{table_fulladdress.comment}}</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in item.fulladdresses.all|dictsort:"addresstype" %}
+                                                    <tr>
+                                                        <!-- <td><a href="{{ i.get_absolute_url }}"  style="color: black;  font-weight: bold;">{{i.name}}</a></td> -->
+                                                        <td>
+                                                            {% for key, value in addresstypes.items %}
+                                                            {% if key == i.addresstype and key != 0 %}
+                                                            {{value}}
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {% if i.cityname %} 
+                                                                {% if i.cityname.settltype %} 
+                                                                    {% for key, value in settltypes.items %}
+                                                                        {% if key == i.cityname.settltype and key != 0 %} {{value}} {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %} 
+                                                            {{ i.cityname }} 
+                                                            {% else %} -- 
+                                                            {% endif %}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {% if i.streetname %} 
+                                                                {% if i.streetname.streettype %} 
+                                                                    {% for key, value in streettypes.items %}
+                                                                        {% if key == i.streetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %} 
+                                                            {{ i.streetname }} 
+                                                            {% else %} -- 
+                                                            {% endif %}
+                                                            {% if i.housenum %} буд. {{ i.housenum }} {% endif %}
+                                                            {% if i.apartmenttype %} 
+                                                            {% for key, value in apartmenttypes.items %}
+                                                            {% if key == i.apartmenttype and key != 0 %} {{value}} {% endif %}
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                            {% if i.apartment %} {{ i.apartment }}{% endif %}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {% if i.oldstreetname %} 
+                                                                {% if i.oldstreetname.streettype %} 
+                                                                    {% for key, value in streettypes.items %}
+                                                                        {% if key == i.oldstreetname.streettype and key != 0 %} {{value}} {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %} 
+                                                            {{ i.oldstreetname }} 
+                                                            {% if i.housenum %} буд. {{ i.housenum }} {% endif %}
+                                                            {% if i.apartmenttype %} 
+                                                            {% for key, value in apartmenttypes.items %}
+                                                            {% if key == i.apartmenttype and key != 0 %} {{value}} {% endif %}
+                                                            {% endfor %}
+                                                            {% endif %}
+                                                            {% if i.apartment %} {{ i.apartment }}{% endif %}
+                                                            {% else %} -- 
+                                                            {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+    
+                                            </table>
+    
+                                        </div>
+                                    </span>
+                                    {% else %}
+                                    <span class="card-text"><b>{{item.address}}</b></span>
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <a href="{% url 'fulladdress_create' %}" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+                                        </div>
+                                        <div class="col-md-4 text-center"></div>
+                                        <div class="col-md-4 text-end">
+                                            <a href="{% url 'fulladdress_list' %}?f={{item.slug}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-journals"></i> {{elems.all}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.comment}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>{{item.comment}}</b></span></p>
+                                </div>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.tags}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><span class="card-text"><b>
+                                        {% if item.tags.exists %}
+                                        {% for tag in item.tags.all %}
+                                        <span class="badge rounded-pill" style="background-color: {{tag.color}};">
+                                            <a href="{{ tag.get_absolute_url }}" style="color: aliceblue;">{{tag.title}}</a>
+                                        </span>
+                                        {% endfor %}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                        </b></span></p>
+                                </div>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.contacts}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <span class="card-text">
+                                        {% if item.contacts.exists %}
+                                        <div class="table">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">{{table_contacts.name}}</th>
+                                                        <th scope="col">{{table_contacts.phone1}}</th>
+                                                        <th scope="col">{{table_contacts.email}}</th>
+                                                        <th scope="col">{{table_contacts.position}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in item.contacts.all|dictsort:"order" %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}" style="color: black; ">
+                                                                {{i.name}}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {% if i.phone1 is not None %}{{i.phone1}}{% endif %}
+                                                            {% if i.phone2 is not None %}, {{i.phone2}}{% endif %}
+                                                            {% if i.phone3 is not None %}, {{i.phone3}}{% endif %}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {{i.email}}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{i.position}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+    
+                                            </table>
+    
+                                        </div>
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <a href="{% url 'contact_create' %}" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i> {{elems.add}}</a></div>
+                                        <div class="col-md-4 text-center"></div>
+                                        <div class="col-md-4 text-end">
+                                            <a href="{% url 'contact_list' %}?f={{item.slug}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-journals"></i> {{elems.all}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <p><span class="card-title">{{card_titles.accesses}}: </span></p>
+                                </div>
+                                <div class="col-md-10">
+                                    <span class="card-text">
+                                        {% if item.accesses.exists %}
+                                        <div class="table">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">{{table_accesses.name}}</th>
+                                                        <th scope="col">{{table_accesses.app}}</th>
+                                                        <th scope="col">{{table_accesses.idinapp}}</th>
+                                                        <th scope="col">{{table_accesses.passinapp}}</th>
+                                                        <th scope="col">{{table_accesses.comment}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in item.accesses.all|dictsort:"order" %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black;  ">
+                                                                {{i.name}}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{i.app}}</td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black; ">
+                                                            {{i.idinapp}}
+                                                        </a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ i.get_absolute_url }}"  style="color: black;  ">
+                                                            {{i.passinapp}}
+                                                        </a>
+                                                        </td>
+                                                        <td>{{i.comment}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+    
+                                            </table>
+    
+                                        </div>
+                                        {% else %}
+                                        -
+                                        {% endif %}
+    
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <a href="{% url 'access_create' %}" class="btn btn-sm btn-success"><i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+                                        </div>
+                                        <div class="col-md-4 text-center"></div>
+                                        <div class="col-md-4 text-end">
+                                            <a href="{% url 'access_list' %}?f={{item.slug}}" class="btn btn-sm btn-outline-primary"><i class="bi bi-journals"></i> {{elems.all}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk
+                                    of
+                                    the card’s content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk
+                                    of
+                                    the card’s content.</p>
+                                <a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">An item</li>
+                                    <li class="list-group-item">A second item</li>
+                                    <li class="list-group-item">A third item</li>
+                                </ul>
+                            </div> -->
+    
+                        <div class="card-footer text-body-secondary  text-end">
+                            <small class="text-body-secondary"> {{elems.lastupd}} {{lastupd|date:"d.m.Y H:i" }} {{elems.lastupdby}} {{lastupdby}}</small>
+                        </div>
+    
+                        <div class="card-footer">
+                            <div class="row g-0">
+                                <div class="col-md-6">
+                                    <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                    <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                                </div>
+                                <div class="col-md-2 text-center">
+    
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
+                                            class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+                <div class="col-lg-1"></div>
+
+        </div>
+
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+{% endblock %}
