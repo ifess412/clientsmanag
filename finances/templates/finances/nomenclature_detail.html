@@ -122,7 +122,13 @@
                     </div>
 
                     <div class="card-footer">
-                        <div class="row g-0">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                            <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>   
+                            <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i> {{elems.edit}}</a>     
+                        </div>
+
+                        <!-- <div class="row g-0">
                             <div class="col-md-6">
                                 <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
                                 <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
@@ -134,7 +140,7 @@
                                 <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
                                         class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>

@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <!-- <a href="{{ new_url }}?direction=in" class="btn btn-success"> <i class="bi bi-plus-lg"></i> {{elems.in}}</a> -->
+                    <!-- <a href="{{ new_url }}?direction=out" class="btn btn-success"> <i class="bi bi-plus-lg"></i> {{elems.out}}</a> -->
+                </div>
+            </div>
+            <div class="col-md-6 my-1">
+
+            </div>
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a href="{{ new_url }}?direction=in" class="btn btn-success"> <i class="bi bi-arrow-down-square"></i> {{elems.in}}</a>
+                    <a href="{{ new_url }}?direction=out" class="btn btn-primary"> <i class="bi bi-arrow-up-square"></i> {{elems.out}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 my-1">
+                <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-between"> -->
+                <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-start"> -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{{ new_url }}" class="btn btn-success"> <i class="bi bi-plus-lg"></i> {{elems.add}}</a>
+                </div>
+            </div>
+            <div class="col-md-6 my-1">
+                <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-center"> -->
+                    {% search_field %}
+                <!-- </div> -->
+            </div>
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if items.exists %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead  class="table-light">
+                        <tr>
+                            {% for key,value in columnames.items %}
+                            {% if key in show_colums %}
+                                <th scope="col">{{value}}  
+                                {% if key in sort_fields %}
+                                    <!-- <div class="btn-group-vertical btn-group-sm"> -->
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                        <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                    </div>
+                                {% endif %}
+                                </th>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <!-- # id, num, datedoc, payer, payee, sum, paytype, paystatus, comment -->
+                        <tr>
+                            <td scope="row">{{item.pk}}</td>
+                            <td>
+                                {% if item.num %}
+                                <a href="{% url dtl_url item.pk %}" style="color: black; ">
+                                {{item.num}}
+                                </a>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.datedoc %}
+                                <a href="{% url dtl_url item.pk %}" style="color: black; ">
+                                {{ item.datedoc|date:"d.m.Y" }}
+                                </a>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{item.payer}}
+                                <!-- <a href="{% url dtl_url item.pk %}" style="color: black; "> {{item.payer}} </a> -->
+                            </td>
+                            <td>
+                                {{item.payee}}
+                                <!-- <a href="{% url dtl_url item.pk %}" style="color: black; "> {{item.payer}} </a> -->
+                            </td>
+                            <td>
+                                {% if item.sum %}
+                                <a href="{% url dtl_url item.pk %}" style="color: black; ">
+                                {{item.sum}}
+                                </a>
+                                {% else %}
+                                0
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for key, value in paytypes.items %}
+                                    {% if key == item.paytype %}
+                                        {{value}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for key, value in paystatuses.items %}
+                                    {% if key == item.paystatus %}
+                                        {{value}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url dtl_url item.pk %}" 
+                                        class="btn btn-outline-secondary btn-sm"
+                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.show}}"
+                                        ><i class="bi bi-eye-fill"></i></a>
+                                    <a href="{% url upd_url item.pk %}"
+                                        class="btn btn-outline-secondary btn-sm" 
+                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                        ><i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a href="{% url del_url item.pk %}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                        ><i class="bi bi-x-square-fill"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+        {% include 'inc/_pagination.html' %}
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+
+{% endblock %}

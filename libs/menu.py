@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-site_logo = {"site_name": "Облік клієнтів", "logo_url": reverse("home"), "childs": 0}
+# site_logo = {"site_name": "Облік клієнтів", "logo_url": reverse("home"), "childs": 0}
 
 menus = [
     {"title": "Головна", "url": reverse("home"), "childs": 0},
@@ -13,8 +13,12 @@ menus = [
         "url": "#",
         "childs": [
             {"title": "Баланс", "url": reverse("balance_list"), "childs": 1},
+            {"title": "Платежі", "url": reverse("cashbook_list"), "childs": 1},
+            {"title": "Ліцензії", "url": reverse("license_list"), "childs": 1},
+            {"title": "Акти", "url": reverse("act_list"), "childs": 1},
             {"title": "Прайс", "url": reverse("price_list"), "childs": 1},
             {"title": "Знижка", "url": reverse("discount_list"), "childs": 1},
+            {"title": "Операції", "url": reverse("transaction_list"), "childs": 1},
         ],
     },
     {
@@ -22,6 +26,7 @@ menus = [
         "url": "#",
         "childs": [
             {"title": "Теги", "url": reverse("tag_list"), "childs": 1},
+            {"title": "Застосунок для доступу", "url": reverse("remoteapp_list"), "childs": 1},
             {"title": "Номенклатура", "url": reverse("nomenclature_list"), "childs": 1},
             {"title": "Адреси", "url": reverse("fulladdress_list"), "childs": 1},
             {"title": "Міста", "url": reverse("city_list"), "childs": 1},

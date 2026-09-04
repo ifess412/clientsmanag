@@ -18,33 +18,37 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
 
+                </div>
             </div>
-            <div class="col-lg-6">
-                {% search_field %}
+            <div class="col-md-6 my-1">
+                    {% search_field %}
             </div>
-            <div class="col-lg-2">
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                </div>
             </div>
         </div>
-        <br>
 
         <div class="row">
             {% if items.exists %}
-            <div class="table">
+            <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             {% for key,value in columnames.items %}
-                            <th scope="col">{{value}}  
+                            {% if key in show_colums %}
+                                <th scope="col">{{value}}  
                                 {% if key in sort_fields %}
-                                <!-- <div class="btn-group-vertical btn-group-sm"> -->
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
-                                    <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
-                                </div>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                        <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                    </div>
                                 {% endif %}
-                            </th>
+                                </th>
+                            {% endif %}
                             {% endfor %}
                         </tr>
                     </thead>
@@ -54,51 +58,62 @@
                             <th scope="row">{{item.pk}}</th>
                             <td>
                                 <!-- <a href="{{ item.get_absolute_url }}"> -->
-                                {% if item.nomenclature.code %}
-                                {{item.nomenclature.code}}
-                                {% else %}
-                                -
-                                {% endif %}
-                                <!-- </a> -->
-                            </td>
-                            <td><a href="{{ item.get_absolute_url }}">{{item.nomenclature}}</a></td>
-                            <td>{{item.price}}</td>
-                            <td>{{item.date_time|date:"d.m.Y H:i"}}</td>
-                            <!-- <td>
                                 {% if item.code %}
                                 {{item.code}}
                                 {% else %}
                                 -
                                 {% endif %}
+                                <!-- </a> -->
                             </td>
-                            {% for key, value in nomenclature_type.items %}
-                            {% if key == item.type %}
-                            <td>{{value}}</td>
-                            {% endif %}
-                            {% endfor %}
                             <td>
-                            {% if item.tag %}
-                            <span class="badge rounded-pill" style="background-color: {{item.tag.color}};">
-                                <a href="{{ item.tag.get_absolute_url }}" style="color: aliceblue;">{{item.tag.title}}</a>
-                            </span>
-                            {% else %}
-                            -
-                            {% endif %}
+                                <!-- <a href="{{ item.get_absolute_url }}"> -->
+                                {{item.name}}
+                                <!-- </a> -->
+                            </td>
+                            <td>
+                                <!-- <a href="{{ item.get_absolute_url }}"> -->
+                                {{item.fullname}}
+                                <!-- </a> -->
+                            </td>
+                            <td>
+                                {% if item.balance__pk %}
+                                <a href="{% url 'transaction_list' %}?f={{item.slug}}" style="color: black; font-weight: bold;">
+                                    {{item.balance__balance}}
+                                </a>
+                                    <!-- <a href="{% url del_url item.balance__pk %}" style="color: black; font-weight: bold;"> -->
+                                        <!-- <b>{{item.balance__balance}}</b> -->
+                                    <!-- </a> -->
+                                
+                                {% else %}
+                                <a href="{% url add_url %}?i={{ item.name }}" style="color: black; font-weight: bold;">
+                                    0
+                                </a>
+                                {% endif %}
+                                
+                                
+                            </td>
+                            <!-- <td>
+                                {% if item.discount__datetime %}
+                                {{item.discount__datetime|date:"d.m.Y H:i"}}
+                                {% else %}
+                                -
+                                {% endif %}
                             </td> -->
                             <td>
                                 <div class="btn-group">
-                                    <!-- <a href="{{ item.get_absolute_url }}" 
-                                        class="btn btn-outline-secondary btn-sm"
-                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.show}}"
-                                        ><i class="bi bi-eye-fill"></i></a>
-                                    <a href="{{ item.get_absolute_url_for_update }}"
-                                        class="btn btn-outline-secondary btn-sm" 
-                                        data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
-                                        ><i class="bi bi-pencil-fill"></i>
-                                    </a>
-                                    <a href="{{ item.get_absolute_url_for_delete }}"
+                                    {% if item.balance__pk %}
+                                    <a href="{% url upd_url item.balance__pk %}"class="btn btn-outline-secondary btn-sm" 
+                                    data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.edit}}"
+                                    ><i class="bi bi-pencil-fill"></i></a>
+                                    <a href="{% url del_url item.balance__pk %}"
                                         class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
-                                        ><i class="bi bi-x-square-fill"></i></a> -->
+                                        ><i class="bi bi-x-square-fill"></i></a>
+                                    {% else %}
+                                    <a href="{% url add_url %}?i={{ item.name }}"class="btn btn-outline-secondary btn-sm" 
+                                    data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.add}}"
+                                    ><i class="bi bi-plus-lg"></i></a>
+                                    {% endif %}
+
                                 </div>
                             </td>
                         </tr>

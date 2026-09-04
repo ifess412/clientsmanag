@@ -8,7 +8,8 @@ from django.contrib.auth import get_user_model
 
     
 
-from libs.logs_adddata import action_tag
+# from libs.logs_adddata import action_tag
+from libs.addata_logs import action_tag
 
 
 class Islog(models.Model):

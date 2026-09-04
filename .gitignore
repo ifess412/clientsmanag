@@ -1,1 +1,8 @@
+# Кеш та локальні дані django
 db.sqlite3
+.env
+.dockerignore
+django_cache/
+# Кеш та локальні дані контейнерів
+data/
+

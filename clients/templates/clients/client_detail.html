@@ -59,7 +59,13 @@
                                     <p><span class="card-title">{{card_titles.code}}: </span></p>
                                 </div>
                                 <div class="col-md-10">
-                                    <p><span class="card-text"><b>{{item.code}}</b></span></p>
+                                    <p><span class="card-text"><b>
+                                        {% if item.code %}
+                                        {{item.code}}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </b></span></p>
                                 </div>
                             </div>
                         
@@ -379,19 +385,37 @@
                         </div>
     
                         <div class="card-footer">
-                            <div class="row g-0">
-                                <div class="col-md-6">
-                                    <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
-                                    <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                            <!-- <div class="container text-center">
+                                <div class="row">
+                                    <div class="col-6 col-md-2 my-1">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-2 my-1">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-6 my-1">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-2 my-1 text-end">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 text-center">
-    
-                                </div>
-                                <div class="col-md-4 text-end">
-                                    <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i
-                                            class="bi bi-pencil-fill"></i> {{elems.edit}}</a>
-                                </div>
+                            </div> -->
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <a href="{{ item.get_absolute_url_for_logs }}" class="btn btn-outline-secondary"><i class="bi bi-clock-history"></i> {{elems.logs}}</a>   
+                                <a href="{{ item.get_absolute_url_for_update }}" class="btn btn-primary"><i class="bi bi-pencil-fill"></i> {{elems.edit}}</a>     
                             </div>
+
                         </div>
     
                     </div>

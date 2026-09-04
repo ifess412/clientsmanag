@@ -1,7 +1,8 @@
 from django import template
 
 # from clients.models import Tag
-from libs.menu import menus, adm_menus, site_logo
+from libs.menu import menus, adm_menus
+from libs.settings import site_name, logo_url
 
 # from django.urls import reverse
 
@@ -23,6 +24,12 @@ def show_menu(menu_class="navmenu"):
 
 @register.inclusion_tag("clients/logo_tpl.html")
 def show_logo():
-    if site_logo: 
-        return {"site_name": site_logo.get('site_name'), "logo_url": site_logo.get('logo_url')}
+    if site_name: 
+        return {"site_name": site_name, "logo_url": logo_url}
     else: return {"site_name": "My Site", "logo_url": "/"}
+
+# @register.inclusion_tag("clients/logo_tpl.html")
+# def show_logo():
+#     if site_logo: 
+#         return {"site_name": site_logo.get('site_name'), "logo_url": site_logo.get('logo_url')}
+#     else: return {"site_name": "My Site", "logo_url": "/"}

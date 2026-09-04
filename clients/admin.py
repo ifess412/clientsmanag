@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
-from libs.clients_adddata import client_type
+# from libs.clients_adddata import client_type
+from libs.addata_clients import client_type
 
 # Models:
 # Tag
@@ -50,17 +51,17 @@ class ClientAdmin(admin.ModelAdmin):
     c_type.short_description = "Тип"
 
 
-class AccessAdmin(admin.ModelAdmin):
-    # id, name, app, idinapp, passinapp, comment, client, order, slug
-    prepopulated_fields = {"slug": ("name", "app")}
-    save_on_top = True
-    list_display = ("id", "name", "app", "client")
-    # list_display = ("id", "name", "app", "idinapp", "passinapp", "client")
-    list_display_links = ("id", "name")
-    search_fields = ("name", "app", "idinapp", "comment", "client")
-    list_filter = ("client",)
-    # # readonly_fields = ('views', 'created_at', 'get_photo')
-    # fields = ("title", "slug")
+# class AccessAdmin(admin.ModelAdmin):
+#     # id, name, app, idinapp, passinapp, comment, client, order, slug
+#     prepopulated_fields = {"slug": ("name", "app")}
+#     save_on_top = True
+#     list_display = ("id", "name", "app", "client")
+#     # list_display = ("id", "name", "app", "idinapp", "passinapp", "client")
+#     list_display_links = ("id", "name")
+#     search_fields = ("name", "app", "idinapp", "comment", "client")
+#     list_filter = ("client",)
+#     # # readonly_fields = ('views', 'created_at', 'get_photo')
+#     # fields = ("title", "slug")
 
 
 class ContactAdmin(admin.ModelAdmin):
@@ -97,7 +98,7 @@ class ContactAdmin(admin.ModelAdmin):
 
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Client, ClientAdmin)
-admin.site.register(Access, AccessAdmin)
+# admin.site.register(Access, AccessAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(City)
 admin.site.register(Distr)

@@ -4,7 +4,7 @@ from .views import *
 
 urlpatterns = [
     path("", index, name="home"),
-    path("/admin", redirect_to_external_site, name="site-admin"),
+    path("admin/", redirect_to_external_site, name="site-admin"),
     path("filterbytag/<str:slug>/", FilterByTag.as_view(), name="filterbytag"),
     # path("export/", clients_export_to_excel,{'model':'client','orderby': 'pk', 'filterby':''}, name="export_to_excel"),
     # path("export/<str:model>/", clients_export_to_excel, {'orderby': 'pk', 'filterby':''} , name="export_to_excel"),
@@ -38,6 +38,18 @@ urlpatterns = [
     #         ]
     #     ),
     # ),
+    path(
+        "remoteapp/",
+        include(
+            [
+                path("", RemoteappListView.as_view(), name="remoteapp_list"),
+                path("create/", RemoteappCreateView.as_view(), name="remoteapp_create"),
+                path("<str:slug>/", RemoteappDetailView.as_view(), name="remoteapp_detail"),
+                path("<str:slug>/update/", RemoteappUpdateView.as_view(), name="remoteapp_update"),
+                path("<str:slug>/delete/", RemoteappDeleteView.as_view(), name="remoteapp_delete"),
+            ]
+        ),
+    ),
     path(
         "tags/",
         include(

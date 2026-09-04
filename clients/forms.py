@@ -5,16 +5,71 @@ from django_select2.forms import Select2Widget, ModelSelect2Widget
 # import re
 # from django.core.exceptions import ValidationError
 
-from .models import Client, Contact, Access, Tag, City, Distr, Street, Fulladdress
-from libs.clients_adddata import client_type
+from .models import *
+# from libs.clients_adddata import client_type
+from libs.addata_clients import client_type
 from libs.add_address import addresstypes, countries, regions, settltypes, streettypes, apartmenttypes
 
 # from libs.add_address import addresstype
 # from libs.all_adddata import msg
 
+    # # Відображається спадаючим списком:
+    # # tags = forms.ModelChoiceField(
+    # #     queryset=Tag.objects.all(),
+    # #     widget=forms.Select(attrs={"class": "form-control"}), 
+    # #     label="Теги")
+    
+    # # Відображається пошуковою строкою з спадаючим списком:
+    # client = forms.ModelChoiceField(
+    #     # queryset=Client.objects.all(),
+    #     queryset=Client.objects.filter(type=1),
+    #     label="Кліент",
+    #     widget=ModelSelect2Widget(
+    #         model=Client,
+    #         # search_fields=['name__icontains'], 
+    #         search_fields=['name__icontains', 'name__iregex' ], 
+    #         attrs={"class": "form-control",
+    #             #    "value": self.i,
+    #                }
+    #         )
+    #     )
+
 
 class ClientForm(forms.ModelForm):
     # id, name, fullname, code, address, comment, type, tags, slug
+    type = forms.ChoiceField(
+        choices=client_type,
+        widget=forms.Select(attrs={'class': 'form-control', 'data-info': 'some-data'}),
+        initial=1,
+        label='Тип'
+    )
+    # Мультивибір
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple, 
+        required=False,
+        label="Теги"
+    )
+    # Відображається спадаючим списком:
+    # tags = forms.ModelChoiceField(
+    #     queryset=Tag.objects.all(),
+    #     widget=forms.Select(attrs={"class": "form-control"}), 
+    #     label="Теги")
+    
+    # Відображається пошуковою строкою з спадаючим списком:
+    # cityname = forms.ModelChoiceField(
+    #     queryset=City.objects.all(),
+    #     label="Місто",
+    #     widget=ModelSelect2Widget(
+    #         model=City,
+    #         # search_fields=['name__icontains'], 
+    #         search_fields=['name__icontains', ], 
+    #         attrs={"class": "form-control",
+    #             #    "value": self.i,
+    #                }
+    #         )
+    #     )
+
     class Meta:
         model = Client
         # fields = "__all__"
@@ -22,7 +77,7 @@ class ClientForm(forms.ModelForm):
             "name",
             "code",
             "fullname",
-            "address",
+            # "address",
             "comment",
             "type",
             "tags",
@@ -33,7 +88,7 @@ class ClientForm(forms.ModelForm):
             "fullname": forms.TextInput(attrs={"class": "form-control"}),
             "code": forms.TextInput(attrs={"class": "form-control", "type":"number"}),
             # "code": forms.IntegerField(attrs={"class": "form-control"}),
-            "address": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            # "address": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             "comment": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             # "type": forms.ChoiceField(
             #     choices=client_type, attrs={"class": "form-control"}
@@ -57,6 +112,27 @@ class ContactForm(forms.ModelForm):
         message="Вкажіть контактний телефон у форматі +380 XX XXX-XX-XX",
         code="invalid_phone_number",
     )
+
+        # # Відображається спадаючим списком:
+    # client = forms.ModelChoiceField(
+    #     queryset=Client.objects.all(),
+    #     widget=forms.Select(attrs={"class": "form-control"}), 
+    #     label="Клієнт")
+    
+    # Відображається пошуковою строкою з спадаючим списком:
+    client = forms.ModelChoiceField(
+        # queryset=Client.objects.all(),
+        queryset=Client.objects.filter(type=1),
+        label="Кліент",
+        widget=ModelSelect2Widget(
+            model=Client,
+            # search_fields=['name__icontains'], 
+            search_fields=['name__icontains', 'name__iregex' ], 
+            attrs={"class": "form-control",
+                #    "value": self.i,
+                   }
+            )
+        )
 
     class Meta:
         model = Contact
@@ -94,6 +170,33 @@ class ContactForm(forms.ModelForm):
 class AccessForm(forms.ModelForm):
     # id, name, app, idinapp, passinapp, comment, client, order, slug
 
+    # Відображається спадаючим списком:
+    app = forms.ModelChoiceField(
+        queryset=Remoteapp.objects.all(), #обираемо номенклатуру с типом ліцензія
+        widget=forms.Select(attrs={"class": "form-control"}), 
+        label="Застосунок для доступу",
+    )
+    # # Відображається спадаючим списком:
+    # client = forms.ModelChoiceField(
+    #     queryset=Client.objects.all(),
+    #     widget=forms.Select(attrs={"class": "form-control"}), 
+    #     label="Клієнт")
+    
+    # Відображається пошуковою строкою з спадаючим списком:
+    client = forms.ModelChoiceField(
+        # queryset=Client.objects.all(),
+        queryset=Client.objects.filter(type=1),
+        label="Кліент",
+        widget=ModelSelect2Widget(
+            model=Client,
+            # search_fields=['name__icontains'], 
+            search_fields=['name__icontains', 'name__iregex' ], 
+            attrs={"class": "form-control",
+                #    "value": self.i,
+                   }
+            )
+        )
+
     class Meta:
         model = Access
         # fields = "__all__"
@@ -122,6 +225,21 @@ class AccessForm(forms.ModelForm):
             #     choices=client_type, attrs={"class": "form-control"}
             # ),
             # "category": forms.Select(attrs={"class": "form-control"}),
+        }
+
+class RemoteappForm(forms.ModelForm):
+    # id, title, color, slug
+    class Meta:
+        model = Remoteapp
+        # fields = "__all__"
+        fields = [
+            "name",
+            # "color",
+        ]
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            # "color": forms.TextInput(attrs={"class": "form-control"}),
+
         }
 
 class TagForm(forms.ModelForm):
@@ -262,6 +380,7 @@ class FulladdressForm(forms.ModelForm):
         queryset=City.objects.all(),
         widget=forms.Select(attrs={"class": "form-control"}), 
         label="Місто")
+    
     # Відображається пошуковою строкою з спадаючим списком:
     # cityname = forms.ModelChoiceField(
     #     queryset=City.objects.all(),
@@ -275,6 +394,7 @@ class FulladdressForm(forms.ModelForm):
     #                }
     #         )
     #     )
+
     # Відображається спадаючим списком:
     distr = forms.ModelChoiceField(
         queryset=Distr.objects.all(),

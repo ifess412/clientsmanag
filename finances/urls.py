@@ -50,17 +50,71 @@ urlpatterns = [
         ),
     ),
     path(
+        "cashbook/",
+        include(
+            [
+                path("", CashbookListView.as_view(), name="cashbook_list"),
+                path("create/", CashbookCreateView.as_view(), name="cashbook_create"),
+                path("<int:pk>/", CashbookDetailView.as_view(), name="cashbook_detail"),
+                path("<int:pk>/update/", CashbookUpdateView.as_view(), name="cashbook_update"),
+                path("<int:pk>/delete/", CashbookDeleteView.as_view(), name="cashbook_delete"),
+            ]
+        ),
+    ),
+    path(
         "balance/",
         include(
             [
                 path("", BalanceListView.as_view(), name="balance_list"),
-                path("create/", PriceCreateView.as_view(), name="balance_create"),
-                path("<int:pk>/", PriceDetailView.as_view(), name="balance_detail"),
-                path("<int:pk>/update/", PriceUpdateView.as_view(), name="balance_update"),
-                path("<int:pk>/delete/", PriceDeleteView.as_view(), name="balance_delete"),
+                path("add/", BalanceCreateItem, name="balance_add"),
+                path("create/", BalanceCreateView.as_view(), name="balance_create"),
+                path("<int:pk>/", BalanceDetailView.as_view(), name="balance_detail"),
+                path("<int:pk>/update/", BalanceUpdateView.as_view(), name="balance_update"),
+                path("<int:pk>/delete/", BalanceDeleteView.as_view(), name="balance_delete"),
             ]
         ),
     ),
+    path(
+        "transaction/",
+        include(
+            [
+                path("", TransactionListView.as_view(), name="transaction_list"),
+                # path("create/", CashbookCreateView.as_view(), name="cashbook_create"),
+                # path("<int:pk>/", CashbookDetailView.as_view(), name="cashbook_detail"),
+                # path("<int:pk>/update/", CashbookUpdateView.as_view(), name="cashbook_update"),
+                path("<int:pk>/delete/", TransactionDeleteView.as_view(), name="transaction_delete"),
+                # path("<str:app>/<str:mdl>/<int:id>", TransactionFilteredListView.as_view(), name="transaction_filtered_list"),
+            ]
+        ),
+    ),
+    path(
+        "license/",
+        include(
+            [
+                path("", LicenseListView.as_view(), name="license_list"),
+                path("create/", LicenseCreateView.as_view(), name="license_create"),
+                path("<int:pk>/", LicenseDetailView.as_view(), name="license_detail"),
+                path("<int:pk>/update/", LicenseUpdateView.as_view(), name="license_update"),
+                path("<int:pk>/delete/", LicenseDeleteView.as_view(), name="license_delete"),
+            ]
+        ),
+    ),
+    path(
+        "act/",
+        include(
+            [
+                path("", ActListView.as_view(), name="act_list"),
+                path("create/", ActCreateView.as_view(), name="act_create"),
+                path("<int:pk>/", ActDetailView.as_view(), name="act_detail"),
+                path("<int:pk>/update/", ActUpdateView.as_view(), name="act_update"),
+                path("<int:pk>/delete/", ActDeleteView.as_view(), name="act_delete"),
+            ]
+        ),
+    ),
+    path('ajax/get-price/', get_lic_price_json, name='get_lic_price'),
+    path('ajax/get-discount/', get_discount_json, name='get_discount'),
+    path('ajax/get-next-doc-number/', get_next_doc_number, name='get_next_doc_number'),
+    # path('finances/ajax/get-next-doc-number/', views.get_next_doc_number, name='get_next_doc_number'),
 ]
 
 # accounts/ login/ [name='login']

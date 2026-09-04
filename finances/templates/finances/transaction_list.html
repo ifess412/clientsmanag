@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load search %}
+
+{% block title %}{{ title }} :: {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<!-- About Section -->
+<section id="about" class="about section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>{{ title }}</h2>
+    </div>
+    <!-- End Section Title -->
+
+    <div class="container">
+
+        <!-- {% if objtitle %}
+        <div class="row">
+            <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+            <h5>{{objtitle}}</h5>
+        </div>
+        <br>
+        {% endif %} -->
+
+        <div class="row">
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    {% if objtitle %}
+                        <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                        <!-- <h5>{{objtitle}}</h5> -->
+                    {% endif %}                         
+                </div>
+            </div>
+            <div class="col-md-6 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                {% if objtitle %}
+                        <!-- <a href="{{ back_url }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a> -->
+                        <h5>{{objtitle}}</h5>
+                {% endif %} 
+                </div>
+            </div>
+            <div class="col-md-3 my-1">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if items.exists %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead  class="table-light">
+                        <tr>
+                            {% for key,value in columnames.items %}
+                            {% if key in show_colums %}
+                                <th scope="col">{{value}}  
+                                {% if key in sort_fields %}
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ this_url }}?sort={{key}}" ><i class="bi bi-caret-up-square"></i></a>
+                                        <a href="{{ this_url }}?sort=-{{key}}" ><i class="bi bi-caret-down-square"></i></a>
+                                    </div>
+                                {% endif %}
+                                </th>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <form method="get">
+                            <!-- {% csrf_token %} -->
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="text" name="fclient" class="form-control form-control-sm" placeholder="" value="{{request.GET.fclient}}" style="width:100px;">
+                                </td>
+                                <td></td>
+                                <!-- <td></td> -->
+                                <td></td>   
+                                <td>
+                                    <input type="text" name="fapp" class="form-control form-control-sm" placeholder="" value="{{request.GET.fapp}}" style="width:100px;">
+                                </td>
+                                <td>
+                                    <input type="text" name="fmodel" class="form-control form-control-sm" placeholder="" value="{{request.GET.fmodel}}" style="width:100px;">
+                                </td>
+                                <td>
+                                    <input type="text" name="fid" class="form-control form-control-sm" placeholder="" value="{{request.GET.fid}}" style="width:50px;">
+                                </td>
+                                <td></td>
+                                <!-- <td>
+                                    <input type="text" name="ftype" class="form-control form-control-sm" placeholder="" value="{{request.GET.ftype}}" style="width:80px;">
+                                </td> -->
+                                <!-- <td>
+                                    <input type="text" name="ftime" class="form-control form-control-sm" placeholder="YYYY-MM-DD" value="{{request.GET.ftime}}" style="width:150px;">
+                                </td>
+                                <td>
+                                    <input type="text" name="fuser" class="form-control form-control-sm" placeholder="" value="{{request.GET.fuser}}" style="width:120px;">
+                                </td> -->
+                                <td>
+                                    <!-- <div class="btn-group"> -->
+                                        <button type="submit" class="btn btn-sm btn-primary mb-3"  data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.filter}}"><i class="bi bi-funnel-fill"></i></button>
+                                        <a href="{{ this_url }}" class="btn  btn-sm btn-outline-primary" style="margin-bottom: 16px;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.clearfilter}}"><i class="bi bi-x-lg"></i></a>
+                                    <!-- </div> -->
+                                </td>
+                            </tr>
+                            </form>
+
+                        {% for item in items %}
+                        <!-- # 'id', 'client', 'sum', 'datetime', 'balance', 'docapp', 'docmodel', 'docid' -->
+                        <tr>
+                            <td scope="row">{{item.pk}}</td>
+                            <td>
+                                {% if item.client %}
+                                {{item.client}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if item.docdate %}
+                                {{ item.docdate|date:"d.m.Y" }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <b>
+                                {% if item.sum %}
+                                {{item.sum}}
+                                {% else %}
+                                -
+                                {% endif %}
+                                </b>
+                            </td>
+                            <!-- <td>
+                                {% if item.balance %}
+                                {{item.balance}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td> -->
+                            <td>
+                                {% if item.docapp %}
+                                {{item.docapp}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.docmodel %}
+                                {{item.docmodel}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.docid %}
+                                {{item.docid}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.datetime %}
+                                {{ item.datetime|date:"d.m.Y H:i" }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    {% if item.docmodel == 'cashbook' %}
+                                    <a href="{% url 'cashbook_detail' item.docid %}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.doc}}"
+                                        >
+                                        <!-- <i class="bi bi-archive-fill"></i> -->
+                                        <!-- <i class="bi bi-bar-chart-fill"></i> -->
+                                        <i class="bi bi-caret-right-square-fill"></i>
+                                    </a>
+                                    {% elif item.docmodel == 'license' %}
+                                    <a href="{% url 'license_detail' item.docid %}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.doc}}"
+                                        >
+                                        <!-- <i class="bi bi-archive-fill"></i> -->
+                                        <!-- <i class="bi bi-bar-chart-fill"></i> -->
+                                        <i class="bi bi-caret-right-square-fill"></i>
+                                    </a>
+                                    {% else %}
+                                    
+                                    {% endif %}
+                                    
+                                    <a href="{% url del_url item.pk %}"
+                                        class="btn btn-outline-secondary btn-sm" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-placement="bottom" data-bs-content="{{elems.del}}"
+                                        ><i class="bi bi-x-square-fill"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+        {% include 'inc/_pagination.html' %}
+
+
+    </div>
+
+</section><!-- /About Section -->
+
+
+
+
+
+{% endblock %}

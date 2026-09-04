@@ -4,10 +4,12 @@ from django.dispatch import receiver
 
 from .middleware import get_current_request
 
-from .models import Client, Contact, Access, Tag, City, Distr, Street, Fulladdress
+# from .models import Client, Contact, Access, Tag, City, Distr, Street, Fulladdress
+from .models import *
 
 from logs.models import Islog
-from libs.logs_adddata import logmess
+# from libs.logs_adddata import logmess
+from libs.addata_logs import logmess
 # from logs.signals import islog_add_record
 
 

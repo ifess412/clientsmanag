@@ -25,7 +25,7 @@
 
         <div class="row">
             {% if items.exists %}
-            <div class="table">
+            <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -46,7 +46,8 @@
                             <td>{{value}}</td>
                             {% endif %}
                             {% endfor %}
-                            <td>{{item.date_time}}</td>
+                            <!-- <td>{{item.date_time}}</td> -->
+                            <td>{{ item.date_time|date:"d.m.Y H:i" }}</td>
                             <td>{% if item.user.first_name %}{{item.user.first_name}}{% else %}{{item.user.username}}{% endif %}</td>
                             <!-- <td>
                                 {% if item.tags.exists %}

@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import *
-from libs.finances_adddata import nomenclature_type
+# from libs.finances_adddata import nomenclature_type
+from libs.addata_finances import nomenclature_type
 
 
 

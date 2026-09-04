@@ -9,7 +9,8 @@ from transliterate import translit
     
 
 # from clients.libs.adddata import client_type, app_names
-from libs.clients_adddata import client_type, app_names
+# from libs.clients_adddata import client_type, app_names
+from libs.addata_clients import client_type
 from libs.add_address import addresstypes, countries, regions, settltypes, streettypes, apartmenttypes
 
 
@@ -29,6 +30,35 @@ Add_data
 #     # finally_slug = slugify(string, allow_unicode=True)
 #     return finally_slug + "-" + str(int(time()))
 
+class Remoteapp(models.Model):
+    # id, title, color, slug
+    name = models.CharField(max_length=100, unique=True, verbose_name="Назва")
+    # color = models.CharField(max_length=100, blank=True,  verbose_name="Колір")
+    slug = models.SlugField(max_length=100, verbose_name="Url", unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("remoteapp_detail", kwargs={"slug": self.slug})
+
+    def get_absolute_url_for_update(self):
+        return reverse("remoteapp_update", kwargs={"slug": self.slug})
+
+    def get_absolute_url_for_delete(self):
+        return reverse("remoteapp_delete", kwargs={"slug": self.slug})
+    
+    def get_absolute_url_for_logs(self):
+        return reverse("filter_islog_list", kwargs={"app": 'clients', "mdl": 'remoteapp', "id": self.pk})
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(translit(self.name, "uk", reversed=True))
+        super(Remoteapp, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Застосунок для доступу"
+        verbose_name_plural = "Застосунок для доступу"
+        ordering = ["name"]
 
 class Tag(models.Model):
     # id, title, color, slug
@@ -67,11 +97,11 @@ class Client(models.Model):
     # id, name, fullname, code, address, comment, type, tags, slug
     name = models.CharField(max_length=100, unique=True, verbose_name="Назва клієнта")
     fullname = models.CharField(max_length=255, verbose_name="Повна назва клієнта")
-    code = models.IntegerField(blank=True,  null=True, verbose_name="Код ЄДРПОУ")
+    code = models.CharField(max_length=20, blank=True,  null=True, verbose_name="Код ЄДРПОУ")
     address = models.TextField(blank=True,  null=True, verbose_name="Адреса")
     comment = models.TextField(blank=True, null=True, verbose_name="Коммент")
     type = models.IntegerField(default=1, verbose_name="Тип", choices=client_type)
-    tags = models.ManyToManyField(Tag, blank=True, related_name="clients")
+    tags = models.ManyToManyField(Tag, blank=True, related_name="clients", verbose_name="Теги")
     slug = models.SlugField(max_length=255, unique=True, verbose_name="Url")
 
     def __str__(self):
@@ -101,10 +131,8 @@ class Client(models.Model):
 class Access(models.Model):
     # id, name, app, idinapp, passinapp, comment, client, order, slug
     name = models.CharField(max_length=100, verbose_name="Назва компа")
-    app = models.CharField(
-        max_length=100, verbose_name="Застосунок для доступу", choices=app_names
-    )
-    # app = models.IntegerField(default=0)
+    # app = models.CharField(max_length=100, verbose_name="Застосунок для доступу", choices=app_names)
+    app = models.ForeignKey(Remoteapp, on_delete=models.PROTECT, blank=True,  null=True, related_name="accesses", verbose_name="Застосунок для доступу")
     idinapp = models.CharField(
         blank=True, max_length=100, verbose_name="ID в застосунку"
     )

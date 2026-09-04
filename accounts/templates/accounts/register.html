@@ -79,7 +79,13 @@
 
 
                         <div class="card-footer">
-                            <div class="row g-0">
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <a href="{% url 'home' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> {{elems.back}}</a>
+                                <button type="submit" class="btn btn-success btn-block"><i class="bi bi-play-fill"></i> {{elems.reg}}</button>
+                            </div>
+
+                            <!-- <div class="row g-0">
                                 <div class="col-md-4">
                                     <a href="{% url 'home' %}" class="btn btn-secondary"><i
                                             class="bi bi-arrow-left"></i> {{elems.back}}</a>
@@ -92,7 +98,7 @@
                                             class="bi bi-play-fill"></i>
                                         {{elems.reg}}</button>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
 

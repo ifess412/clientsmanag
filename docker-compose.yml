@@ -1,0 +1,85 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data/django_cache:/app/django_cache
+      # Якщо у вас є статичні файли (static/media), які раніше роздавав Nginx,
+      # перегляньте важливу примітку під цим конфігом.
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - production_net
+      - traefik-net # Додаємо Django в мережу Traefik
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # --- МІТКИ ДЛЯ TRAEFIK ---
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.clientsmanag.rule=Host(`clients.isloc.net`)"
+      - "traefik.http.routers.clientsmanag.entrypoints=web"
+      # - "traefik.http.routers.clientsmanag.entrypoints=websecure"
+      # - "traefik.http.routers.clientsmanag.tls=true" # Локальний TLS
+      # Вказуємо внутрішній порт, на якому працює Gunicorn всередині контейнера web
+      - "traefik.http.services.clientsmanag.loadbalancer.server.port=8000"
+
+  db:
+    image: mariadb:11.8
+    restart: unless-stopped
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    env_file:
+      - .env
+    healthcheck:
+      disable: true
+    networks:
+      - production_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - production_net
+    volumes:
+      - ./data/redis:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+# Сервіс 'nginx' повністю видалено, оскільки його функції тепер виконує Traefik.
+
+networks:
+  production_net:
+    driver: bridge
+    name: production_net
+    # ipam:
+    #   config:
+    #     - subnet: 172.20.0.0/16
+  # Підключаємо зовнішню мережу Traefik
+  traefik-net:
+    external: true
+    name: traefik-net
+
+volumes:
+  mariadb_data:
+
+
+
+

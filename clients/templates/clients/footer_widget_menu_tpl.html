@@ -1,0 +1,19 @@
+<h4>{{ widget_title }}</h4>
+<ul>
+    {% for item in items %}
+    {% if item.childs == 0 %}
+    <li><i class="bi bi-chevron-right"></i> <a href="{{ item.url }}">{{ item.title }}</a></li>
+    <!-- <li><a href="{{ item.url }}">{{ item.title }}</a></li> -->
+    <!-- <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li> -->
+    {% else %}
+    <li class="dropdown"><a href="{{ item.url }}"><span>{{ item.title }}</span> <i
+                class="bi bi-chevron-down toggle-dropdown"></i></a>
+        <ul>
+            {% for child in item.childs %}
+            <li><i class="bi bi-chevron-right"></i> <a href="{{ child.url }}">{{ child.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>

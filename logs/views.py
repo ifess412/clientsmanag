@@ -17,9 +17,15 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import *
 # from .forms import NomenclatureForm
 
-from libs.all_adddata import *
-from libs.logs_adddata import *
-from libs.settings import *
+# from libs.all_adddata import *
+# from libs.logs_adddata import *
+# from libs.settings import *
+
+# Додаткові дані та налаштування
+from libs.addata_all import *
+from libs.addata_logs import *
+from libs.confs import *
+
 
 # # for logging
 # from .signals import *
@@ -42,12 +48,17 @@ class FilterIslogListView(PermissionRequiredMixin, ListView):
     # mdls = "islogs"
     context_object_name = "items"
     template_name = APPL + "/" + mdl + "_filterlist.html"
-    paginate_by = paginate_in_tables
+    # paginate_by = paginate_in_tables
     login_url = reverse_lazy('login')
     # permission_required = "logs.view_islog"
     permission_required = APPL + ".view_" + mdl
     # redirect_field_name = 'clients'
     # raise_exception = True
+
+    def get_paginate_by(self, queryset):
+        # Отримуємо 'page_size' з URL, наприклад ?page_size=10
+        # За замовчуванням paginate_in_tables
+        return self.request.GET.get('page_size', paginate_in_tables)
 
     def get_queryset(self):
         return Islog.objects.filter(app_label=self.kwargs["app"]).filter(obj_model=self.kwargs["mdl"]).filter(obj_id=self.kwargs["id"])
@@ -62,6 +73,7 @@ class FilterIslogListView(PermissionRequiredMixin, ListView):
         context["columnames"] = table_logs
         # context["client_type"] = client_type
         context["elems"] = buttons
+        context["msg"] = msg
         context["err_msg"] = msg["no_data_in_db"]
         context["title"] = mdl_name_pl
         context['actions'] = action_tag
@@ -78,7 +90,7 @@ class IslogListView(PermissionRequiredMixin, ListView):
     # mdls = "islogs"
     context_object_name = "items"
     template_name = APPL + "/" + mdl + "_list.html"
-    paginate_by = paginate_in_tables_adminka
+    # paginate_by = paginate_in_tables_adminka
     login_url = reverse_lazy('login')
     # permission_required = ("logs.view_islog", 'logs.delete_islog')
     permission_1 = APPL + ".view_" + mdl
@@ -86,6 +98,11 @@ class IslogListView(PermissionRequiredMixin, ListView):
     permission_required = (permission_1, permission_2)
     # redirect_field_name = 'clients'
     # raise_exception = True
+
+    def get_paginate_by(self, queryset):
+        # Отримуємо 'page_size' з URL, наприклад ?page_size=10
+        # За замовчуванням paginate_in_tables
+        return self.request.GET.get('page_size', paginate_in_tables_adminka)
 
     def get_queryset(self):
         # return Islog.objects.filter(app_label=self.kwargs["app"]).filter(obj_model=self.kwargs["mdl"]).filter(obj_id=self.kwargs["id"])
@@ -134,12 +151,14 @@ class IslogListView(PermissionRequiredMixin, ListView):
         context["columnames"] = table_admlogs
         # context["client_type"] = client_type
         context["elems"] = buttons
+        context["msg"] = msg
         context["err_msg"] = msg["no_data_in_db"]
         # context["count_msg"] = msg["count_text"]
         context["title"] = mdl_name_pl
         context['actions'] = action_tag
         context["this_url"] = reverse_lazy(mdl +"_list")
         context["s"] = ""
+        context["page_sizes"] = paginate_by_size
         fapp = self.request.GET.get("fapp")
         if fapp:
             context["s"] += f"fapp={fapp}&"
@@ -158,7 +177,10 @@ class IslogListView(PermissionRequiredMixin, ListView):
         fuser = self.request.GET.get("fuser")
         if fuser:
             context["s"] += f"fuser={fuser}&"
-            
+        page_size = self.request.GET.get("page_size")
+        if page_size:
+            context["page_size"] = page_size
+            context["s"] = f"page_size={page_size}&"    
         # ftime = self.request.GET.get("ftime")
         # if ftime:
         #     context["ftime"] = f"ftime={ftime}&"

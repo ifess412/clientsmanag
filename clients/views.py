@@ -24,9 +24,12 @@ from logs.views import get_last_log
 # from clients.libs.settings import *
 
 # Додаткові дані та налаштування
-from libs.all_adddata import *
-from libs.clients_adddata import *
-from libs.settings import *
+# from libs.all_adddata import *
+from libs.addata_all import *
+# from libs.clients_adddata import *
+from libs.addata_clients import *
+# from libs.settings import *
+from libs.confs import *
 from libs.add_func import *
 
 # for logging
@@ -81,6 +84,7 @@ def my_queryset(instance):
 # def get_tag(request):
 #     return render(request, "clients/main.html")
 
+
 class MyListView(PermissionRequiredMixin, ListView):
     # id, name, app, idinapp, passinapp, comment, client, order, slug
     model = Access
@@ -91,17 +95,23 @@ class MyListView(PermissionRequiredMixin, ListView):
     # mdl = "tag"
     context_object_name = "items"
     template_name = APPL + "/" + mdl + "_list.html"
-    paginate_by = paginate_in_tables
+    # paginate_by = paginate_in_tables
     # login_url = reverse_lazy('login')
     permission_required = APPL + ".view_" + mdl
     columnames = table_tags
     show_colums = ['id', 'name', 'app', 'idinapp', 'passinapp', 'client']
     sort_fields = ['id', 'name', 'app', 'idinapp', 'passinapp', 'client']
+    # page_sizes = paginate_by_size
     # search_in_fields = ['name__icontains', 'name__icontains']
     add_data = {
         # 'addresstypes': addresstypes,
         # 'settltypes': settltypes,
     }
+
+    def get_paginate_by(self, queryset):
+        # Отримуємо 'page_size' з URL, наприклад ?page_size=10
+        # За замовчуванням paginate_in_tables
+        return self.request.GET.get('page_size', paginate_in_tables)
 
 
     def get_queryset(self):
@@ -134,6 +144,7 @@ class MyListView(PermissionRequiredMixin, ListView):
         context["show_colums"] = self.show_colums
         context["columnames"] = self.columnames
         context["elems"] = buttons
+        context["msg"] = msg
         context["err_msg"] = msg["no_data_in_db"]
         context["new_url"] = reverse_lazy(mdl +"_create")
         context["this_url"] = reverse_lazy(mdl +"_list")
@@ -147,6 +158,7 @@ class MyListView(PermissionRequiredMixin, ListView):
         context["mdl"] = mdl
         context["sort"] = 'pk'
         context["filter"] = ''
+        context["page_sizes"] = paginate_by_size
         search_field = self.request.GET.get("s")
         if search_field:
             context["s"] = f"s={search_field}&"
@@ -161,6 +173,10 @@ class MyListView(PermissionRequiredMixin, ListView):
         if sort_by:
             context["sort"] = sort_by
             context["s"] = f"sort={sort_by}&"
+        page_size = self.request.GET.get("page_size")
+        if page_size:
+            context["page_size"] = page_size
+            context["s"] = f"page_size={page_size}&"
         add_data = self.add_data
         if (add_data):
             for key, value in add_data.items():
@@ -179,7 +195,6 @@ class MyDetailView(PermissionRequiredMixin, DetailView):
     card_titles = table_tags
     add_data = {
         # 'addresstypes': addresstypes,
-        # 'settltypes': settltypes,
     }
         # add_data = self.add_data
         # if (add_data):
@@ -419,9 +434,10 @@ class ClientListView(MyListView):
     # mdls = "clients"
     # mdl = "client"
     template_name = APPL + "/" + mdl + "_list.html"
-    # paginate_by = paginate_in_tables
+    # paginate_by = 5
     permission_required = APPL + ".view_" + mdl
     columnames = table_clients
+    # columnames = get_columnames(model)
     show_colums = ['id', 'name','fullname', 'code','address', 'type', 'tags', 'pk']
     sort_fields = ['id', 'name', 'fullname','code', 'address','type', 'tags']
     # client_type = client_type
@@ -542,6 +558,7 @@ class ContactListView(MyListView):
     paginate_by = paginate_in_tables
     permission_required = APPL + ".view_" + mdl
     columnames = table_contacts
+    # columnames = get_columnames(model)
     show_colums = ['id', 'name','phone1', 'email','client', 'position', 'order', 'pk']
     sort_fields = ['id', 'name', 'email','client', 'position']
 
@@ -592,145 +609,6 @@ class ContactDeleteView(MyDeleteView):
     # template_name = APPL + "/single_delete.html"
     success_url = reverse_lazy(mdl + "_list")
     permission_required = APPL + ".delete_" + mdl
-
-# class ContactListView(PermissionRequiredMixin, ListView):
-#     model = Contact
-#     mdls = "contacts"
-#     context_object_name = "items"
-#     template_name = "clients/" + mdls + "_list.html"
-#     paginate_by = paginate_in_tables
-#     login_url = reverse_lazy('login')
-#     permission_required = "clients.view_contact"
-#     # redirect_field_name = 'contact_list'
-#     # raise_exception = True
-
-#     def get_queryset(self):
-#         queryset = Contact.objects.all()
-#         search_field = self.request.GET.get("s")
-#         if search_field:
-#             search_field2 = search_field.capitalize()
-#             queryset = queryset.filter(Q(name__icontains=search_field) | Q(name__icontains=search_field2))
-#         filter_by_client = self.request.GET.get("f")
-#         if filter_by_client:
-#             queryset = queryset.order_by('order').filter(
-#                 Q(client__slug=filter_by_client)
-#                 # | Q(app_label__icontains=fapp)
-#                 )
-#         return queryset
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         mdls = "contacts"
-#         context["columnames"] = table_contacts
-#         context["elems"] = buttons
-#         context["title"] = mdlnames.get(mdls)
-#         search_field = self.request.GET.get("s")
-#         if search_field:
-#             context["s"] = f"s={search_field}&"
-#             context["title"] = mdlnames.get(mdls) + msg.get('search_title') + str(search_field)
-#             context["err_msg"] = msg["no_data_in_db"]
-#         filter_by_client = self.request.GET.get("f")
-#         if filter_by_client:
-#             context["s"] = f"s={search_field}&"
-#             context["title"] = mdlnames.get(mdls) + msg.get('filter_title') + str(filter_by_client)
-#             context["err_msg"] = msg["no_data_in_db"]
-#         return context
-
-# class ContactDetailView(PermissionRequiredMixin, DetailView):
-#     model = Contact
-#     mdls = "contacts"
-#     context_object_name = "item"
-#     template_name = "clients/" + mdls + "_detail.html"
-#     permission_required = "clients.view_contact"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["card_titles"] = table_contacts
-#         context["elems"] = buttons
-#         mdls = "contact"
-#         obj_obj = Contact.objects.get(slug=self.kwargs["slug"])
-#         obj_str = str(obj_obj)
-#         obj_id = obj_obj.id
-#         context["title"] = (mdlnames.get(mdls) + ": " + obj_str)
-#         lastupd = get_last_log(app_label=APPL, obj_model=mdls, obj_id=obj_id)
-#         if (lastupd) :
-#             context["lastupd"] = lastupd.date_time
-#             context["lastupdby"] = lastupd.user.first_name if lastupd.user.first_name else lastupd.user.username
-#         return context
-
-# class ContactCreateView(PermissionRequiredMixin, CreateView):
-#     form_class = ContactForm
-#     # model = Contact
-#     # fields = [
-#     #     "name",
-#     #     "phone1",
-#     #     "phone2",
-#     #     "phone3",
-#     #     "email",
-#     #     "client",
-#     #     "position",
-#     #     "order",
-#     #     "comment",
-#     # ]
-#     mdls = "contacts"
-#     context_object_name = "item"
-#     template_name = "clients/" + mdls + "_add.html"
-#     success_url = reverse_lazy("contact_list")
-#     permission_required = "clients.add_contact"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["card_titles"] = table_contacts
-#         context["elems"] = buttons
-#         mdls = "contact"
-#         context["title"] = msg.get("add") + mdlnames.get(mdls)
-#         return context
-
-# class ContactUpdateView(PermissionRequiredMixin, UpdateView):
-#     form_class = ContactForm
-#     model = Contact
-#     # fields = [
-#     #     "name",
-#     #     "phone1",
-#     #     "phone2",
-#     #     "phone3",
-#     #     "email",
-#     #     "client",
-#     #     "position",
-#     #     "order",
-#     #     "comment",
-#     #     # "slug",
-#     # ]
-#     mdls = "contacts"
-#     context_object_name = "item"
-#     template_name = "clients/" + mdls + "_add.html"
-#     success_url = reverse_lazy("contact_list")
-#     permission_required = "clients.change_contact"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["card_titles"] = table_contacts
-#         context["elems"] = buttons
-#         mdls = "contact"
-#         context["title"] = msg.get("edit") + mdlnames.get(mdls)
-#         return context
-
-# class ContactDeleteView(PermissionRequiredMixin, DeleteView):
-#     model = Contact
-#     fields = [
-#         "name",
-#     ]
-#     template_name = "clients/single_delete.html"
-#     success_url = reverse_lazy("contact_list")
-#     permission_required = "clients.delete_contact"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["elems"] = buttons
-#         context["msg"] = msg["del_question"]
-#         context["title"] = msg.get("del_title")
-#         context["back_url"] = reverse_lazy("contact_list")
-#         return context
 
 class AccessListView(MyListView):
     # id, name, app, idinapp, passinapp, comment, client, order, slug
@@ -810,6 +688,60 @@ class AccessDeleteView(MyDeleteView):
     success_url = reverse_lazy(mdl + "_list")
     permission_required = APPL + ".delete_" + mdl
 
+class RemoteappListView(MyListView):
+    # id, title, color, slug
+    model = Remoteapp
+    mdl = model._meta.model_name
+    template_name = APPL + "/" + mdl + "_list.html"
+    paginate_by = paginate_in_tables
+    permission_required = APPL + ".view_" + mdl
+    columnames = table_remoteapp
+    sort_fields = ['id', 'name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_field = self.request.GET.get("s")
+        if search_field:
+            search_field2 = search_field.capitalize()
+            queryset = queryset.filter(
+                Q(name__icontains=search_field)
+                | Q(name__icontains=search_field2)
+                # | Q(fullname__icontains=search_field)
+                # | Q(code__icontains=search_field)
+            )
+        return queryset
+
+class RemoteappDetailView(MyDetailView):
+    model = Remoteapp
+    mdl = model._meta.model_name
+    template_name = APPL + "/" + mdl + "_detail.html"
+    permission_required = APPL + ".view_" + mdl
+    card_titles = table_remoteapp
+
+class RemoteappCreateView(MyCreateView):
+    form_class = RemoteappForm
+    model = Remoteapp
+    mdl = model._meta.model_name
+    # template_name = APPL + "/single_add.html"
+    success_url = reverse_lazy(mdl +"_list")
+    permission_required = APPL + ".add_" + mdl
+
+class RemoteappUpdateView(MyUpdateView):
+    form_class = RemoteappForm
+    model = Remoteapp
+    mdl = model._meta.model_name
+    # template_name = APPL + "/single_add.html"
+    success_url = reverse_lazy(mdl + "_list")
+    permission_required = APPL + ".change_" + mdl
+    card_titles = table_remoteapp
+
+class RemoteappDeleteView(MyDeleteView):
+    model = Remoteapp
+    mdl = model._meta.model_name
+    # template_name = APPL + "/single_delete.html"
+    success_url = reverse_lazy(mdl + "_list")
+    permission_required = APPL + ".delete_" + mdl
+
 class TagListView(MyListView):
     # id, title, color, slug
     model = Tag
@@ -864,144 +796,7 @@ class TagDeleteView(MyDeleteView):
     success_url = reverse_lazy(mdl + "_list")
     permission_required = APPL + ".delete_" + mdl
 
-# class TagListView(PermissionRequiredMixin, ListView):
-#     # id, title, color, slug
-#     model = Tag
-#     mdls = "tags"
-#     mdl = "tag"
-#     context_object_name = "items"
-#     template_name = APPL + "/" + mdl + "_list.html"
-#     paginate_by = paginate_in_tables
-#     # login_url = reverse_lazy('login')
-#     permission_required = APPL + ".view_" + mdl
-#     sort_fields = ['id', 'title', 'color']
 
-#     def get_queryset(self):
-#         queryset = Tag.objects.all()
-#         search_field = self.request.GET.get("s")
-#         if search_field:
-#             search_field2 = search_field.capitalize()
-#             queryset = queryset.filter(
-#                 Q(title__icontains=search_field)
-#                 | Q(title__icontains=search_field2)
-#                 # | Q(fullname__icontains=search_field)
-#                 # | Q(code__icontains=search_field)
-#             )
-#         # filter_by_tag = self.request.GET.get("f")
-#         # if filter_by_tag:
-#         #     queryset = queryset.order_by('order').filter(
-#         #         Q(client__slug=filter_by_tag)
-#         #         # | Q(app_label__icontains=fapp)
-#         #         )
-#         sort_by = self.request.GET.get("sort")
-#         if sort_by:
-#             queryset = queryset.order_by(sort_by)
-#         return queryset
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         mdls = self.mdls
-#         mdl = self.mdl
-#         context["sort_fields"] = self.sort_fields
-#         context["columnames"] = table_tags
-#         context["elems"] = buttons
-#         context["err_msg"] = msg["no_data_in_db"]
-#         context["new_url"] = reverse_lazy(mdl +"_create")
-#         context["this_url"] = reverse_lazy(mdl +"_list")
-#         context["add_url"] = mdl +"_add"
-#         context["dtl_url"] = mdl +"_detail"
-#         context["upd_url"] = mdl +"_update"
-#         context["del_url"] = mdl +"_delete"
-#         context["title"] = mdlnames.get(mdls)
-#         search_field = self.request.GET.get("s")
-#         if search_field:
-#             context["s"] = f"s={search_field}&"
-#             context["title"] = mdlnames.get(mdl) + msg.get('search_title') + str(search_field)
-#         # filter_by_client = self.request.GET.get("f")
-#         # if filter_by_client:
-#         #     context["s"] = f"s={search_field}&"
-#         #     context["title"] = mdlnames.get(mdl) + msg.get('filter_title') + str(filter_by_client)
-#         sort_by = self.request.GET.get("sort")
-#         if sort_by:
-#             context["s"] = f"sort={sort_by}&"
-#         return context
-    
-# class TagDetailView(PermissionRequiredMixin, DetailView):
-#     model = Tag
-#     mdl = "tag"
-#     context_object_name = "item"
-#     template_name = APPL + "/" + mdl + "_detail.html"
-#     permission_required = APPL + ".view_" + mdl
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         mdl = self.mdl
-#         context["card_titles"] = table_tags
-#         context["elems"] = buttons
-#         obj_obj = Tag.objects.get(slug=self.kwargs["slug"])
-#         obj_str = str(obj_obj)
-#         obj_id = obj_obj.id
-#         context["title"] = (mdlnames.get(mdl) + ": " + obj_str)
-#         context["back_url"] = reverse_lazy(mdl +"_list")
-#         lastupd = get_last_log(app_label=APPL, obj_model=mdl, obj_id=obj_id)
-#         if (lastupd) :
-#             context["lastupd"] = lastupd.date_time
-#             context["lastupdby"] = lastupd.user.first_name if lastupd.user.first_name else lastupd.user.username
-#         return context
-
-# class TagCreateView(PermissionRequiredMixin, CreateView):
-#     form_class = TagForm
-#     # model = Tag
-#     # fields = ["title", "color"]
-#     mdl = "tag"
-#     context_object_name = "item"
-#     template_name = APPL + "/single_add.html"
-#     success_url = reverse_lazy(mdl +"_list")
-#     permission_required = APPL + ".add_" + mdl
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         mdl = self.mdl
-#         context["elems"] = buttons
-#         context["title"] = msg.get("add") + mdlnames.get(mdl)
-#         context["back_url"] = reverse_lazy(mdl +"_list")
-#         return context
-
-# class TagUpdateView(PermissionRequiredMixin, UpdateView):
-#     form_class = TagForm
-#     model = Tag
-#     mdl = "tag"
-#     # fields = ["title", "color"]
-#     context_object_name = "item"
-#     template_name = APPL + "/single_add.html"
-#     success_url = reverse_lazy(mdl + "_list")
-#     permission_required = APPL + ".change_" + mdl
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         mdl = self.mdl
-#         context["card_titles"] = table_tags
-#         context["elems"] = buttons
-#         context["title"] = msg.get("edit") + mdlnames.get(mdl)
-#         context["back_url"] = reverse_lazy(mdl + "_list")
-#         return context
-
-# class TagDeleteView(PermissionRequiredMixin, DeleteView):
-#     model = Tag
-#     fields = [
-#         "title",
-#     ]
-#     template_name = "clients/single_delete.html"
-#     success_url = reverse_lazy("tag_list")
-#     permission_required = "clients.delete_tag"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["elems"] = buttons
-#         context["msg"] = msg["del_question"]
-#         context["title"] = msg.get("del_title")
-#         context["back_url"] = reverse_lazy("tag_list")
-#         return context
 
 # FilterByTag
 class FilterByTag(PermissionRequiredMixin, ListView):

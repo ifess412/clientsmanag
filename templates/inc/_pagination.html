@@ -1,7 +1,28 @@
 {% if page_obj.paginator.count %}
-    <p>
-        Показано {{ page_obj.start_index }}-{{ page_obj.end_index }} з {{ page_obj.paginator.count }} записів.
-    </p>
+    <div class="row">
+        <div class="col-md-6 my-1">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <p>
+                    {{ msg.count_text1 }} {{ page_obj.start_index }}-{{ page_obj.end_index }} {{ msg.count_text2 }} {{ page_obj.paginator.count }} {{ msg.count_text3 }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 my-1">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ msg.page_size_txt }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        {% for ps in page_sizes %}
+                            <li><a class="dropdown-item" href="?page_size={{ps}}">{{ ps }}</a></li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+
+            </div>
+        </div>
+    </div>
 {% else %}
     <div class="alert alert-danger" role="alert">
         {{err_msg}}

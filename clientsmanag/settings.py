@@ -11,24 +11,55 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+import logging
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Коренева директорія застосунку
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Загружаем переменные из файла .env
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Запис логу в файл
+LOG_FILE = os.path.join(BASE_DIR, "server_log.txt")
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    encoding="utf-8"
+)
+logging.info(f"--- ЗЧИТУВАННЯ ПОТОЧНИХ НАЛАШТУВАННЯ З SETTINGS: ---") 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-h#=rcxc2ejw)3p628s8p47(_&59-a$v^%8pjo!v#n@t)*#we)*"
+DEFAULT_SECRET_KEY = "django-insecure-h#=rcxc2ejw)3p628s8p47(_&59-a$v^%8pjo!v#n@t)*#we)*"
+SECRET_KEY = os.getenv("SECRET_KEY", DEFAULT_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", False)
+# DEBUG = True
 # DEBUG = False
+logging.info(f"Поточні налаштування: DEBUG = {DEBUG}") 
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.200', 'localhost']
+ALLOWED_HOSTS_STR = os.getenv("ALLOWED_HOSTS", '*')
+ALLOWED_HOSTS = [item.strip() for item in ALLOWED_HOSTS_STR.split(',')]
+# ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.200', 'localhost']
 # ALLOWED_HOSTS = ['*']
+# print(ALLOWED_HOSTS)
+logging.info(f"Поточні налаштування: ALLOWED_HOSTS = {ALLOWED_HOSTS}") 
+
+
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://ishome.net:8282',
+#     'http://localhost:8282', # Опционально для локальной разработки
+# ]
+CSRF_TRUSTED_ORIGINS_STR = os.getenv("CSRF_TRUSTED_ORIGINS", '*')
+CSRF_TRUSTED_ORIGINS = [item.strip() for item in CSRF_TRUSTED_ORIGINS_STR.split(',')]
 
 
 # Application definition
@@ -51,6 +82,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,15 +117,40 @@ WSGI_APPLICATION = "clientsmanag.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Зчитуємо нові параметри з файлу налаштуваннь
+DB_TYPE=os.getenv("DB_TYPE", 'sqlite')
+logging.info(f"Поточні налаштування: DB_TYPE = {DB_TYPE}") 
+
+if DB_TYPE=='sqlite':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
+elif DB_TYPE=='mysql':
+    MYSQL_DATABASE=os.getenv("MYSQL_DATABASE", 'msqldb1')
+    MYSQL_USER=os.getenv("MYSQL_USER", '')
+    MYSQL_PASSWORD=os.getenv("MYSQL_PASSWORD", '')
+    MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
+    MYSQL_PORT = os.getenv("MYSQL_PORT", "3306")
 
-
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            'NAME': MYSQL_DATABASE,
+            'USER': MYSQL_USER,
+            'PASSWORD': MYSQL_PASSWORD,
+            'HOST': MYSQL_HOST,
+            'PORT': MYSQL_PORT,
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
+    }
+    logging.info(f"Поточні налаштування: DB_NAME = {MYSQL_DATABASE}") 
+    logging.info(f"Поточні налаштування: DB_HOST:DB_PORT = {MYSQL_HOST}:{MYSQL_PORT}") 
 
 
 # Password validation
@@ -120,7 +177,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "uk"
 
-TIME_ZONE = "UTC"
+# TIME_ZONE = "UTC"
+# TIME_ZONE = "Europe/Kiev"
+TIME_ZONE = 'Europe/Kyiv'
+
 
 USE_I18N = True
 
@@ -130,11 +190,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "clientsmanag/static"),
 ]
+# Увімкнення стиснення та кешування
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
@@ -150,21 +212,52 @@ INTERNAL_IPS = [
     # ...
 ]
 
+USE_REDIS = os.getenv("USE_REDIS", "True") == "True"
+# USE_REDIS = os.getenv("USE_REDIS", "True")
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
         "LOCATION": os.path.join(BASE_DIR, "django_cache"),
     },
     "select2": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        "BACKEND": "django_redis.cache.RedisCache" if USE_REDIS else "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "redis://redis:6379/2" if USE_REDIS else "select2-local-cache",
     }
 }
+if USE_REDIS:
+    CACHES["select2"]["OPTIONS"] = {"CLIENT_CLASS": "django_redis.client.DefaultClient"}
 
-# Tell select2 which cache configuration to use:
-# SELECT2_CACHE_BACKEND = "select2"
+SELECT2_CACHE_BACKEND = "select2"
 
 LOGIN_REDIRECT_URL = '/'
+
+if os.environ.get('DEBUG', 'True') == 'False':
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+        },
+    }
+
